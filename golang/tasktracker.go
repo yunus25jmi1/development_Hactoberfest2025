@@ -254,8 +254,14 @@ func (tm *TaskManager) loadTasks() {
 }
 
 func (tm *TaskManager) saveTasks() {
-	data, _ := json.MarshalIndent(tm.Tasks, "", "  ")
-	os.WriteFile("tasks.json", data, 0644)
+	data, err := json.MarshalIndent(tm.Tasks, "", "  ")
+	if err != nil {
+		fmt.Printf("Error marshaling tasks: %v\n", err)
+		return
+	}
+	if err := os.WriteFile("tasks.json", data, 0644); err != nil {
+		fmt.Printf("Error writing tasks to file: %v\n", err)
+	}
 }
 
 func viewMetrics() {
